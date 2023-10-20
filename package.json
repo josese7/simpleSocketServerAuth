@@ -14,9 +14,11 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-fileupload": "^1.4.1",
     "express-validator": "^6.9.2",
     "google-auth-library": "^9.0.0",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^5.11.15"
+    "mongoose": "^5.11.15",
+    "uuid": "^9.0.1"
   }
 }

@@ -40,6 +40,14 @@ const existProductById =  async (id) => {
     }
     console.log('validando categoria id')
 } 
+const colectionsAllowed = (colection = '', colections = [])=>{
+
+    const included = colections.includes(colection)
+    if(!included){
+        throw new Error(`La coleccion ${colection} no es permitida.  Permitidas : ${colections}`)
+    }
+   return true
+}
 
 
 module.exports = {
@@ -47,5 +55,6 @@ module.exports = {
     isEmailExits,
     existUserById,
     existCategoryById,
-    existProductById
+    existProductById,
+    colectionsAllowed
 }

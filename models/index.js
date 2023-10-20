@@ -1,7 +1,7 @@
-const Category = required('./category');
-const Role = required('./role');
-const Server = required('./server');
-const User = required('./user');
+const Category = require('./category');
+const Role = require('./role');
+const Server = require('./server');
+const User = require('./users');
 const Product = require('./product');
 
 module.exports = {
