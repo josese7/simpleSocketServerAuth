@@ -1,3 +1,5 @@
+const path = require("path")
+const fs = require("fs")
 const { request, response } = require("express");
 const { uploadFile } = require("../helpers/upload-file");
 const {User, Product} =require('../models')
@@ -49,6 +51,15 @@ const updateImage = async (req = request, res = response) => {
         default:
             return res.status(500).json({msg:'No implementado'}) 
     }
+        //Clear preview images
+
+        if (model.img){
+            const pathImage = path.join(__dirname, '../uploads', colection, model.img)
+
+            if( fs.existsSync(pathImage) ){
+                fs.unlinkSync(pathImage);
+            }
+        }
 
         const name = await uploadFile(req.files, undefined, colection );
         model.img = name
