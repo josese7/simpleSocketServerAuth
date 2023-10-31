@@ -72,8 +72,59 @@ const updateImage = async (req = request, res = response) => {
     // console.log('req.files >>>', req.files); // eslint-disable-line
 
 }
+//TODO: Mejorar validacion de coleccion
+const getImage = async (req = request, res = response) => {
+
+    const { id, colection } = req.params
+
+    let model;
+  
+    switch(colection) {
+
+        case 'users':
+            model = await User.findById(id)
+            if(!model ){
+                return res.status(400).json({
+                    msg: `No existe un usuario con el id ${id}`
+                })
+            }
+
+            break;
+        case 'products':
+            model = await Product.findById(id)
+            if(!model ){
+                return res.status(400).json({
+                    msg: `No existe un producto con el id ${id}`
+                })
+            }
+
+            break;
+        default:
+            return res.status(500).json({msg:'No implementado'}) 
+    }
+        //Clear preview images
+
+        if (model.img){
+            const pathImage = path.join(__dirname, '../uploads', colection, model.img)
+
+            if( fs.existsSync(pathImage) ){
+                return res.sendFile(pathImage);
+                //console.log("sendfile", pathImage)
+            }
+        }
+
+      
+        res.json({
+            msg: 'Falta place holder'
+        })
+   
+
+    // console.log('req.files >>>', req.files); // eslint-disable-line
+
+}
 
 module.exports = {
     loadFile,
-    updateImage
+    updateImage,
+    getImage
 }
