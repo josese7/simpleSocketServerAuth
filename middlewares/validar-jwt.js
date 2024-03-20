@@ -6,7 +6,7 @@ const validarJWT = async ( req= request, res = response, next ) =>{
 
     const token = req.header('x-token');
 
-    console.log('Token', token)
+    //console.log('Token', token)
     if( !token ){
         return res.status(401).json({
             msg: 'No hay token en la peticion'
@@ -16,7 +16,7 @@ const validarJWT = async ( req= request, res = response, next ) =>{
         
         const {uid} = jwt.verify(token, process.env.secretOrPrivateKey);
 
-        console.log('Payload', uid)
+        //console.log('Payload', uid)
         //Verify user exits in DB
         userLoged = null
         userLoged = await User.findById(uid);

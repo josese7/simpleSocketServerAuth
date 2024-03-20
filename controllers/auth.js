@@ -42,26 +42,30 @@ const login = async (req, res = response)=>{
 
 const googleSignIn = async (req, res=response)=>{
     const {id_token} = req.body
+    
 try {
     const {name, picture, email} = await googleVerify(id_token);
     let user = await User.findOne({email})
-
     if(!user){
         //Create user
         
         const data = {
             name,
             email,
-            password: 'google',
+            password: name+email+'google',
             google: true,
             role: "USER_ROLE"
             
         }
-        console.log("create user", user, data)
+        console.log("create user", data)
         user = new User(data)
         await user.save()
-    }
+       
 
+       // console.log('datos del usuario google', email, name, picture)
+    
+    }
+ 
     //If user state false
     if(!user.state){
         return res.status(401).json({
@@ -70,14 +74,15 @@ try {
     }
     
     //Generate JWT
-    console.log(user, "User nuevo")
+    console.log(user, "Usuario encontraado")
     const token = await generateJWT(user.id)
     res.json({
         msg:"Google autenticado",
         user,
         token
-    })
+    }) 
 } catch (error) {
+    console.log(error)
     res.status(400).json({
         ok:false,
         msg:'El token no se pudo verificar'
@@ -86,9 +91,20 @@ try {
 }
 
 
+
+}
+const refreshToken = async (req, res =response) => {
+   const user =req.userData
+   const token = await generateJWT(user.id)
+
+   res.status(202).json({
+    user,
+    token
+   })
 }
 
 module.exports = {
     login,
-    googleSignIn
+    googleSignIn,
+    refreshToken,
 }
