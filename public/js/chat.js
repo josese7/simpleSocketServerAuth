@@ -3,12 +3,12 @@ let user = null;
 let socket = null;
 //HTML References
 
-const txtUid        = document.querySelector('#txtUid')
+/* const txtUid        = document.querySelector('#txtUid')
 const txtMensaje    = document.querySelector('#txtMensaje')
 const ulUsers       = document.querySelector('#ulUsers')
 const ulMensaje     = document.querySelector('#ulMensaje')
 const btnOut        = document.querySelector('#btnOut')
-
+ */
 
 //Validate token for CHAT
 const validarJWT = async () => {
@@ -40,6 +40,7 @@ const validarJWT = async () => {
 }
 
 const connectSocket = () => {
+    console.log("HOLA")
     socket = io({
         'extraHeaders': {
             'x-token': localStorage.getItem('token')
@@ -55,19 +56,26 @@ const connectSocket = () => {
 
     socket.on('receive-messages', (payload)=>{
        
-        showMessagess(payload)
+        // showMessagess(payload)
+        renderizarMensajes(payload, false);
+        scrollBottom();
     })
     socket.on('active-users', (payload)=>{ //or  socket.on('active-users',showUsers)
        
-       showUsers(payload)
+    //    showUsers(payload)
+          renderizarUsuarios(payload);
     })
     socket.on('private-message', (payload)=>{
         //TODO:
-        console.log(payload)
+        console.log('Mensaje Privado:', payload);
     })
 }
-//const socket = io()
 
+const loadInfo = ()=>{
+
+}
+//const socket = io()
+/* 
 const showUsers = (users = [])=>{
     let usersHtml = '';
 
@@ -100,14 +108,14 @@ const showMessagess = (messagges = [])=>{
         `
     })
     ulMensaje.innerHTML = messaggesHtml;
-}
-btnOut.addEventListener('click', ()=> {
+} */
+/* btnOut.addEventListener('click', ()=> {
     console.log('logout', socket)
     socket.disconnect()
     localStorage.clear()
     //window.location = 'index.html'
-})
-txtMensaje.addEventListener('keyup', (ev) =>{ //keyup => Enter
+}) */
+/* txtMensaje.addEventListener('keyup', (ev) =>{ //keyup => Enter
     //console.log(ev.keyCode)
     const message = txtMensaje.value;
     const uid = txtUid.value;
@@ -119,7 +127,7 @@ txtMensaje.addEventListener('keyup', (ev) =>{ //keyup => Enter
     //console.log(message, ev)
     socket.emit('send-message', {message, uid})
 
-})
+}) */
 const main = async () => {
     await validarJWT()
 
