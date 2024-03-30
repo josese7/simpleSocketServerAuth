@@ -44,7 +44,7 @@ const socketController = async ( socket = new Socket(), io ) =>{
     socket.on('send-message', ({uid, message})=>{
 
 
-        //console.log(message)
+        console.log(message, user.id)
 
         if(uid){
             //Private Chat
@@ -52,7 +52,7 @@ const socketController = async ( socket = new Socket(), io ) =>{
             
         }else{ //Group Chat
 
-            chatMessages.sendMessage(user.id, user.name, message)
+            chatMessages.sendMessage(user.id, user.name, message )
             io.emit('receive-messages', chatMessages.last10)
         }
     })

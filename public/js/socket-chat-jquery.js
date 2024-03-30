@@ -34,45 +34,49 @@ function renderizarUsuarios(personas) { // [{},{},{}]
 }
 
 //FIXME: Notifycations 
-function renderizarMensajes(mensaje, yo) {
-
+function renderizarMensajes(messages, yo) {
     var html = '';
-    var fecha = new Date(mensaje.fecha);
-    var hora = fecha.getHours() + ':' + fecha.getMinutes();
-
+   
+    
+    //console.log("Chat grupal",messages, hora, yo)
     var adminClass = 'info';
-    if (mensaje.name === 'Administrador') {
-        adminClass = 'danger';
-    }
-
-    if (yo) {
-        html += '<li class="reverse">';
-        html += '    <div class="chat-content">';
-        html += '        <h5>' + mensaje.name + '</h5>';
-        html += '        <div class="box bg-light-inverse">' + mensaje.message + '</div>';
-        html += '    </div>';
-        html += '    <div class="chat-img"><img src="assets/images/users/5.jpg" alt="user" /></div>';
-        html += '    <div class="chat-time">' + hora + '</div>';
-        html += '</li>';
-
-    } else {
-
-        html += '<li class="animated fadeIn">';
-
-        if (mensaje.name !== 'Administrador') {
-            html += '    <div class="chat-img"><img src="assets/images/users/1.jpg" alt="user" /></div>';
+    messages.forEach(({name, message, date}) => {
+        if (name === 'Administrador') {
+            adminClass = 'danger';
         }
-
-        html += '    <div class="chat-content">';
-        html += '        <h5>' + mensaje.name + '</h5>';
-        html += '        <div class="box bg-light-' + adminClass + '">' + mensaje.message + '</div>';
-        html += '    </div>';
-        html += '    <div class="chat-time">' + hora + '</div>';
-        html += '</li>';
-
-    }
+        var fecha = new Date(date);
+        var hora = fecha.getHours() + ':' + fecha.getMinutes();
+        if (yo) {
 
 
+            html += '<li class="reverse">';
+            html += '    <div class="chat-content">';
+            html += '        <h5>' + name + '</h5>';
+            html += '        <div class="box bg-light-inverse">' + message + '</div>';
+            html += '    </div>';
+            html += '    <div class="chat-img"><img src="assets/images/users/5.jpg" alt="user" /></div>';
+            html += '    <div class="chat-time">' + hora + '</div>';
+            html += '</li>';
+    
+        } else {
+    
+            html += '<li class="animated fadeIn">';
+    
+            if (name !== 'Administrador') {
+                html += '    <div class="chat-img"><img src="assets/images/users/1.jpg" alt="user" /></div>';
+            }
+    
+            html += '    <div class="chat-content">';
+            html += '        <h5>' + name + '</h5>';
+            html += '        <div class="box bg-light-' + adminClass + '">' + message + '</div>';
+            html += '    </div>';
+            html += '    <div class="chat-time">' + hora + '</div>';
+            html += '</li>';
+    
+        }
+    
+    })
+    
     divChatbox.append(html);
 
 }
@@ -116,9 +120,9 @@ formEnviar.on('submit', function(e) {
         return;
     }
 
-    socket.emit('crearMensaje', {
-        nombre: nombre,
-        mensaje: txtMensaje.val()
+    socket.emit('send-message', {
+        name: nombre,
+        message: txtMensaje.val()
     }, function(mensaje) {
         txtMensaje.val('').focus();
         renderizarMensajes(mensaje, true);

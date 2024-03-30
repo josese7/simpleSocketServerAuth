@@ -1,8 +1,9 @@
 class Message{
-    constructor(uid, name, message){
+    constructor(uid, name, message, date){
         this.uid = uid;
         this.message = message;
         this.name = name;
+        this.date = date;
     }
 }
 
@@ -22,7 +23,8 @@ class ChatMessages {
 
 
     sendMessage(uid, name, message){
-        this.messages.unshift( new Message(uid, name, message))
+        const date = new Date().getTime()
+        this.messages.unshift( new Message(uid, name, message, date))
     }
 
     connectUser(user){
